@@ -31,7 +31,7 @@ namespace Repro2
     }
 
 
-    public interface Finished : IEvent
+    public interface Finished : IEvent //ICommand // issue https://github.com/Particular/NServiceBus.Testing/issues/37
     {
         string InitialData { get; set; }
     }
@@ -45,8 +45,8 @@ namespace Repro2
         {
             Test.Initialize();
             Test.Saga<SomeSaga>()
-                .WhenHandling<SomethingHappened>(m => m.What = "123")
                 .ExpectPublish<Finished>(e => e.InitialData == "123")
+                .WhenHandling<SomethingHappened>(m => m.What = "123")
                 .AssertSagaCompletionIs(true);
         }
     }

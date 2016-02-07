@@ -45,12 +45,12 @@ namespace Repro3
         {
             Test.Initialize();
             Test.Saga<SomeSaga>()
+                .ExpectPublish<Finished>(e => e.InitialData == "123")
                 .When(saga =>
                 {
                     saga.Handle(new Kickoff { What = "123" });
                     Assert.That(saga.Data.What, Is.EqualTo("123"));
                 })
-                .ExpectPublish<Finished>(e => e.InitialData == "123")
                 .AssertSagaCompletionIs(true);
         }
     }
